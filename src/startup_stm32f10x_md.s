@@ -38,13 +38,13 @@
 
 /* start address for the initialization values of the .data section. 
 defined in linker script */
-.word	_sidata
+.word	.data
 /* start address for the .data section. defined in linker script */  
-.word	_sdata
+.word	.data
 /* end address for the .data section. defined in linker script */
 .word	_edata
 /* start address for the .bss section. defined in linker script */
-.word	_sbss
+.word	.bss
 /* end address for the .bss section. defined in linker script */
 .word	_ebss
 
@@ -68,18 +68,18 @@ Reset_Handler:
   b	LoopCopyDataInit
 
 CopyDataInit:
-	ldr	r3, =_sidata
+	ldr	r3, =.data
 	ldr	r3, [r3, r1]
 	str	r3, [r0, r1]
 	adds	r1, r1, #4
     
 LoopCopyDataInit:
-	ldr	r0, =_sdata
+	ldr	r0, =.data
 	ldr	r3, =_edata
 	adds	r2, r0, r1
 	cmp	r2, r3
 	bcc	CopyDataInit
-	ldr	r2, =_sbss
+	ldr	r2, =.bss
 	b	LoopFillZerobss
 /* Zero fill the bss segment. */  
 FillZerobss:
@@ -91,7 +91,7 @@ LoopFillZerobss:
 	cmp	r2, r3
 	bcc	FillZerobss
 /* Call the clock system intitialization function.*/
-  bl  SystemInit 	
+  bl  System_Init	
 /* Call the application's entry point.*/
 	bl	main
 	bx	lr    

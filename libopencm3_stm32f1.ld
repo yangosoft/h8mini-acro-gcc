@@ -22,10 +22,10 @@
 /* Memory regions must be defined in the ld script which includes this one. */
 
 /* Enforce emmition of the vector table. */
-EXTERN (vector_table)
+EXTERN (Default_Handler)
 
 /* Define the entry point of the output file. */
-ENTRY(reset_handler)
+ENTRY(Reset_Handler)
 
 /* Define sections. */
 SECTIONS

@@ -6,16 +6,17 @@ LD      = arm-none-eabi-gcc
 CP      = arm-none-eabi-objcopy
 OD      = arm-none-eabi-objdump
 
-TOOLCHAIN_DIR := $(shell dirname `which $(CC)`)/../$(PREFIX)
+TOOLCHAIN_DIR :=   /usr/lib/arm-none-eabi
+#$(shell dirname `which $(CC)`)/../$(PREFIX)
 
 CFLAGS		+= -std=c11 -Os -g -Wall -I$(TOOLCHAIN_DIR)/include \
-		   -fno-common -mcpu=cortex-m3 -mthumb -msoft-float -MD -DGD32F1 -D__TARGET_PROCESSOR=GD32F103C8 -DUSE_STDPERIPH_DRIVER 
+		   -mcpu=cortex-m3 -mthumb -msoft-float -MD -DGD32F1 -D__TARGET_PROCESSOR=GD32F103C8 -DUSE_STDPERIPH_DRIVER 
 #-specs=nosys.specs
 
 LDFLAGS		+= -Wl,--start-group -lc -lgcc -Wl,--end-group \
 		   -nostartfiles -Wl,--gc-sections \
-			-L./ -L$(TOOLCHAIN_DIR)/lib -L$(TOOLCHAIN_DIR)/lib/stm32/f1  \
-		   -mthumb -march=armv7 -mfix-cortex-m3-ldrd -msoft-float -specs=nosys.specs 
+			-L./ -L$(TOOLCHAIN_DIR)/lib \
+		   -mthumb -march=armv7 -mfix-cortex-m3-ldrd -msoft-float -specs=nosys.specs -lm
 		   
 		   
 
@@ -69,7 +70,7 @@ obj/%.o: src/%.cpp
 	
 $(PROGRAM_NAME).elf: $(OBJ_FILES)
 	@ echo "[Linking]"
-	$(LD) -T stm32f103c8.ld $(LDFLAGS) $^ -o $(PROGRAM_NAME).elf
+	$(LD) -T stm32f103c8.ld  $^ $(LDFLAGS) -o $(PROGRAM_NAME).elf
 
 	
 
